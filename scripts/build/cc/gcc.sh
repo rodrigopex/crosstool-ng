@@ -567,6 +567,14 @@ do_gcc_core_backend() {
         extra_config+=("--disable-libphobos" )
     fi
 
+    # In baremetal, we only build the ObjC compiler without its runtime.
+    # The runtime will need to be provided externally by the user.
+    if [    "${mode}" = "baremetal"    \
+         -a "${CT_CC_LANG_OBJC}"  = "y"    \
+       ]; then
+        extra_config+=("--disable-libobjc" )
+    fi
+
     # Some versions of gcc have a defective --enable-multilib.
     # Since that's the default, only pass --disable-multilib. For multilib,
     # also enable multiarch. Without explicit --enable-multiarch, core
